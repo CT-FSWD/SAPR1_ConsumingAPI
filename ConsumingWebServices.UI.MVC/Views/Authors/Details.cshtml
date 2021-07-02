@@ -1,0 +1,116 @@
+﻿@model ConsumingWebServices.DATA.EF.Author
+
+@{
+    ViewBag.Title = $"{Model.FirstName} {Model.LastName} | Details";
+}
+
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-6">
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.LastName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.LastName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.City)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.City)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.State)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.State)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ZipCode)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ZipCode)
+                <button class="btn btn-sm btn-danger" onclick="showWeather(@Model.ZipCode)"><i class="fa fa-cloud"></i></button>
+            </dd>
+
+            @if (Model.ZipCode != null)
+            {
+                <dd id="currentWeather"></dd>
+            }
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Country)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Country)
+            </dd>
+
+        </dl>
+    </div>
+    @* Output element for currentWeather to display *@
+    <div class="col-6">
+        
+    </div>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.AuthorID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+
+
+@section scripts {
+
+    @* LOGIC BOMB - ANY ZIP CODES WITH A LEADING 0 ARE BEING TRUNCATED *@
+    <!--ADDEDjQuery UI CDN-->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+                //Consume API/Service below : openweathermap.org - Before we coded the content below, you created an account with openweathermap.org. We do this so that we can gain an access token/key that we can have access to the data from that API.
+        //
+        //api.openweathermap.org/data/2.5/weather?zip=94040,us&units=imperial&appid=f7f24fd89eaea018dc93912b9281de60
+
+                //Consume API/Service with the function below
+                function showWeather(zipCode) {
+                    var userZip = new String(zipCode);
+                    var len = userZip.length;
+                    if (len != 5) {
+                        userZip = `0${zipCode}`;
+                    }
+
+                    //1.Pre-create URL
+                    var url = 'http://api.openweathermap.org/data/2.5/weather?zip=' + userZip + ',us&units=imperial&appid=f7f24fd89eaea018dc93912b9281de60';
+
+                    //2. Use $.getJSON() to call API, using the url object above
+
+                    //Send AJAX request to get temp
+                    $.getJSON(url).done(function (data) {
+                        //onSuccess - data object contains the weather. Add info to the popup placeholder element.
+
+                        //We can utilize resources like POSTMAN to see the structure of JSON data that is returned in our API call
+                        document.getElementById('currentWeather').innerHTML = '<div class="text-danger">@Model.City  temperature is ' + data.main.temp + '&deg;F</div>';
+                    });
+                }
+
+    </script>
+}
