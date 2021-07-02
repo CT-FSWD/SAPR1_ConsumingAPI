@@ -70,10 +70,7 @@
 
         </dl>
     </div>
-    @* Output element for currentWeather to display *@
-    <div class="col-6">
-        
-    </div>
+   
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.AuthorID }) |
@@ -109,6 +106,5 @@
                         document.getElementById('currentWeather').innerHTML = '<div class="text-danger">@Model.City  temperature is ' + data.main.temp + '&deg;F</div>';
                     });
                 }
-
     </script>
 }
