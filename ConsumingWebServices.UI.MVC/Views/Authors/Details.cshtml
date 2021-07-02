@@ -1,10 +1,11 @@
 ﻿@model ConsumingWebServices.DATA.EF.Author
 
+@* STEP 1 *@
 @{
     ViewBag.Title = $"{Model.FirstName} {Model.LastName} | Details";
 }
 
-
+@* Step 2 *@
 <h2>@ViewBag.Title</h2>
 
 <div class="row">
@@ -49,9 +50,11 @@
 
             <dd>
                 @Html.DisplayFor(model => model.ZipCode)
+                @* Step 3 *@
                 <button class="btn btn-sm btn-danger" onclick="showWeather(@Model.ZipCode)"><i class="fa fa-cloud"></i></button>
             </dd>
 
+            @* Step 4 *@
             @if (Model.ZipCode != null)
             {
                 <dd id="currentWeather"></dd>
@@ -78,20 +81,14 @@
 </p>
 
 
-
-@section scripts {
-
-    @* LOGIC BOMB - ANY ZIP CODES WITH A LEADING 0 ARE BEING TRUNCATED *@
-    <!--ADDEDjQuery UI CDN-->
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
+@* Step 5 *@
+@section scripts {      
     <script>
                 //Consume API/Service below : openweathermap.org - Before we coded the content below, you created an account with openweathermap.org. We do this so that we can gain an access token/key that we can have access to the data from that API.
-        //
-        //api.openweathermap.org/data/2.5/weather?zip=94040,us&units=imperial&appid=f7f24fd89eaea018dc93912b9281de60
-
+       
                 //Consume API/Service with the function below
-                function showWeather(zipCode) {
+        function showWeather(zipCode) {
+                    //logic bomb - zip codes that start with 0 will lose the 0 at the beginning of the zipcode. The code below checks the length and programmatically adds the 0 back to the front of the string before making the request to the API.
                     var userZip = new String(zipCode);
                     var len = userZip.length;
                     if (len != 5) {
@@ -106,8 +103,9 @@
                     //Send AJAX request to get temp
                     $.getJSON(url).done(function (data) {
                         //onSuccess - data object contains the weather. Add info to the popup placeholder element.
+                        console.log(data);
 
-                        //We can utilize resources like POSTMAN to see the structure of JSON data that is returned in our API call
+                        //Once we have the weather data, show it in the UI
                         document.getElementById('currentWeather').innerHTML = '<div class="text-danger">@Model.City  temperature is ' + data.main.temp + '&deg;F</div>';
                     });
                 }
