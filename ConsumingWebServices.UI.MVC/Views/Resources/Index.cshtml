@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ConsumingWebServices.UI.MVC.Models.ResourceViewModel>
+
+@{
+    ViewBag.Title = "Consuming API - Read functionality";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Url)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LinkText)
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.CategoryId)*@
+            Category
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Url)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LinkText)
+        </td>
+        <td>
+            @*@Html.DisplayFor(modelItem => item.CategoryId)*@
+            @Html.DisplayFor(modelItem => item.Category.CategoryName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ResourceId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ResourceId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ResourceId })
+        </td>
+    </tr>
+}
+
+</table>
